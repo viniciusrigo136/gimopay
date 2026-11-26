@@ -9,7 +9,7 @@ import {
   useTransform,
 } from "motion/react";
 import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import {
   ArrowDownToLine,
   BarChart3,
@@ -44,6 +44,15 @@ export function Solutions() {
   const [index, setIndex] = useState(0);
   const [autoplay, setAutoplay] = useState(true);
   const reduce = usePrefersReducedMotion();
+  const isDesktop = useSyncExternalStore(
+    (cb) => {
+      const mq = window.matchMedia("(min-width: 1024px)");
+      mq.addEventListener("change", cb);
+      return () => mq.removeEventListener("change", cb);
+    },
+    () => window.matchMedia("(min-width: 1024px)").matches,
+    () => false,
+  );
   const sectionRef = useRef<HTMLElement>(null);
   const inView = useInView(sectionRef, { amount: 0.35 });
   const progress = useMotionValue(0);
@@ -201,6 +210,19 @@ export function Solutions() {
               <p className="relative mb-5 text-body text-ardosia-700 lg:hidden" aria-live="polite">
                 {active.description}
               </p>
+              {/* No mobile, deslizar o painel troca de solução */}
+              <m.div
+                className="relative touch-pan-y lg:touch-auto"
+                drag={isDesktop ? false : "x"}
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.35}
+                dragSnapToOrigin
+                onDragEnd={(_, info) => {
+                  const last = solutions.length - 1;
+                  if (info.offset.x < -50 || info.velocity.x < -400) select(index === last ? 0 : index + 1);
+                  else if (info.offset.x > 50 || info.velocity.x > 400) select(index === 0 ? last : index - 1);
+                }}
+              >
               <ScaleToFit width={600} height={440}>
                 <AnimatePresence mode="wait">
                   <m.div
@@ -215,7 +237,18 @@ export function Solutions() {
                   </m.div>
                 </AnimatePresence>
               </ScaleToFit>
-              <div className="relative mt-5 flex justify-end">
+              </m.div>
+              <div className="relative mt-5 flex items-center justify-between lg:justify-end">
+                <div className="flex items-center gap-1.5 lg:hidden" aria-hidden>
+                  {solutions.map((sol, i) => (
+                    <m.span
+                      key={sol.id}
+                      className={cn("block h-1.5 rounded-full", i === index ? "bg-ciano-500" : "bg-ardosia-300/60")}
+                      animate={{ width: i === index ? 22 : 6 }}
+                      transition={{ type: "spring", stiffness: 420, damping: 30 }}
+                    />
+                  ))}
+                </div>
                 <IllustrativeBadge />
               </div>
             </div>

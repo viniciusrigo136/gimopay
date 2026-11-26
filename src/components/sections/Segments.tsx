@@ -13,6 +13,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { RevealText } from "@/components/ui/RevealText";
+import { SegmentMarquee } from "./SegmentMarquee";
 import { copy, segments } from "@/content/copy";
 import { cn } from "@/lib/cn";
 
@@ -30,9 +31,19 @@ export function Segments() {
           </div>
         </div>
 
-        <div className="lg:col-span-7">
+        <div className="min-w-0 lg:col-span-7">
+          {/* Mobile: faixas em movimento (a lista abaixo segue disponível para leitores de tela) */}
+          <div className="mb-10 md:hidden">
+            <SegmentMarquee
+              items={segments.map((s, i) => ({
+                label: s.replace(/\.$/, ""),
+                icon: icons[i],
+                highlight: mobilityIdx.has(i),
+              }))}
+            />
+          </div>
           <m.ul
-            className="grid sm:grid-cols-2 sm:gap-x-8"
+            className="grid max-md:sr-only sm:grid-cols-2 sm:gap-x-8"
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, amount: 0.2 }}

@@ -3,6 +3,7 @@
 import { m } from "motion/react";
 import { Expand, Headset, Layers, MousePointerClick, Plug, ScanEye, type LucideIcon } from "lucide-react";
 import { RevealText } from "@/components/ui/RevealText";
+import { SwipeDeck } from "@/components/motion/SwipeDeck";
 import { copy } from "@/content/copy";
 
 const icons: LucideIcon[] = [MousePointerClick, Layers, ScanEye, Plug, Expand, Headset];
@@ -13,7 +14,7 @@ export function Differentials() {
       <div className="container-page">
         <RevealText text={copy.differentials.title} className="max-w-[16ch] text-h2 font-bold" />
         <m.ul
-          className="mt-14 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:mt-20 lg:grid-cols-3"
+          className="mt-14 hidden gap-x-10 gap-y-12 sm:grid-cols-2 md:grid lg:mt-20 lg:grid-cols-3"
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, amount: 0.15 }}
@@ -44,6 +45,22 @@ export function Differentials() {
             );
           })}
         </m.ul>
+
+        {/* Mobile: cartões para deslizar */}
+        <SwipeDeck label="Diferenciais GIMO Pay" className="mt-10 md:hidden" itemClassName="flex">
+          {copy.differentials.items.map((d, i) => {
+            const Icon = icons[i];
+            return (
+              <div key={d.title} className="flex w-full flex-col rounded-[var(--radius-panel)] bg-marinho-950 p-6 text-ardosia-300">
+                <span className="grid size-12 place-items-center rounded-[0.875rem] bg-ciano-500 text-marinho-950">
+                  <Icon className="size-6" strokeWidth={1.8} aria-hidden />
+                </span>
+                <h3 className="mt-8 text-h3 font-semibold text-white">{d.title}</h3>
+                <p className="mt-2">{d.text}</p>
+              </div>
+            );
+          })}
+        </SwipeDeck>
       </div>
     </section>
   );

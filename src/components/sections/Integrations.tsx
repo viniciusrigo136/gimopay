@@ -15,6 +15,9 @@ export function Integrations() {
       <div className="container-page relative grid items-center gap-y-14 lg:grid-cols-12 lg:gap-x-10">
         <div className="lg:col-span-5">
           <RevealText text={integrations.title} className="text-h2 font-bold" />
+          <div className="mt-10 lg:hidden">
+            <IntegrationDiagram />
+          </div>
           <div className="mt-7 space-y-4">
             {integrations.paragraphs.map((p, i) => (
               <FadeIn key={p} as="p" delay={0.08 * i} className="max-w-[32rem]">
@@ -28,7 +31,7 @@ export function Integrations() {
             </ButtonLink>
           </div>
         </div>
-        <div className="lg:col-span-7">
+        <div className="hidden lg:col-span-7 lg:block">
           <IntegrationDiagram />
         </div>
       </div>
