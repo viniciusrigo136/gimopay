@@ -1,0 +1,147 @@
+@import "tailwindcss";
+
+/*
+ * GIMO Pay — design tokens
+ * Destaque: cores do logo GIMO Pay. Estrutura neutra e escuro: manual da família Gimo.
+ */
+@theme {
+  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+
+  /* Ciano — logo GIMO Pay */
+  --color-ciano-50: #eaf8fd;
+  --color-ciano-100: #cdeff9;
+  --color-ciano-200: #9fe0f2;
+  --color-ciano-500: #02aad7; /* marca: superfícies, CTAs, estados */
+  --color-ciano-600: #0091bd; /* texto grande sobre branco (3.6:1) */
+  --color-ciano-700: #00799c; /* texto e links sobre branco (5:1) */
+
+  /* Marinho */
+  --color-marinho-800: #00316d; /* logo: títulos */
+  --color-marinho-900: #0a2147;
+  --color-marinho-950: #0d182a; /* manual Gimo: seções escuras */
+
+  /* Ardósia — manual Gimo */
+  --color-ardosia-200: #dde3ea;
+  --color-ardosia-300: #b8c3d4;
+  --color-ardosia-500: #667280;
+  --color-ardosia-700: #334155;
+
+  --color-nevoa: #f5f7fa;
+  --color-sucesso: #0f9d6b;
+  --color-erro: #c2333a;
+
+  /* Escala tipográfica (Bringhurst 14/16/18/21/24/36/48/60/72) */
+  --text-display: clamp(2.5rem, 1.7rem + 2.6vw, 3.75rem);
+  --text-display--line-height: 1.04;
+  --text-display--letter-spacing: -0.035em;
+  --text-h2: clamp(2rem, 1.45rem + 2.1vw, 3.375rem);
+  --text-h2--line-height: 1.08;
+  --text-h2--letter-spacing: -0.03em;
+  --text-h3: 1.3125rem;
+  --text-h3--line-height: 1.35;
+  --text-lead: clamp(1.0625rem, 1rem + 0.3vw, 1.3125rem);
+  --text-lead--line-height: 1.6;
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.65;
+
+  /* Forma: raio como hierarquia */
+  --radius-tile: clamp(1.5rem, 1rem + 1.8vw, 2.5rem); /* raio do ícone GIMO Pay */
+  --radius-panel: 1.25rem;
+  --radius-control: 0.875rem;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@layer base {
+  html {
+    scroll-padding-top: 5.5rem;
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background: #fff;
+    color: var(--color-ardosia-700);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3 {
+    color: var(--color-marinho-800);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--color-ciano-200);
+    color: var(--color-marinho-950);
+  }
+
+  :focus-visible {
+    outline: 2.5px solid var(--color-ciano-500);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  .on-dark :focus-visible {
+    outline-color: #fff;
+  }
+}
+
+/* Lenis (rolagem suave) */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+.lenis [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+@utility container-page {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+  @media (width >= 48rem) {
+    padding-inline: 2rem;
+  }
+  @media (width >= 80rem) {
+    padding-inline: 2.5rem;
+  }
+}
+
+@utility section-y {
+  padding-block: clamp(5rem, 3.5rem + 6vw, 9rem);
+}
+
+/* Padrão gráfico da família Gimo: rede de nós */
+@utility pattern-rede {
+  background-image: radial-gradient(circle at 1px 1px, currentColor 1.2px, transparent 1.6px);
+  background-size: 28px 28px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
