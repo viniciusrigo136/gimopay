@@ -31,7 +31,7 @@
   --color-erro: #c2333a;
 
   /* Escala tipográfica (Bringhurst 14/16/18/21/24/36/48/60/72) */
-  --text-display: clamp(2.5rem, 1.7rem + 2.6vw, 3.75rem);
+  --text-display: clamp(2.25rem, 1.5rem + 2.9vw, 3.75rem);
   --text-display--line-height: 1.04;
   --text-display--letter-spacing: -0.035em;
   --text-h2: clamp(2rem, 1.45rem + 2.1vw, 3.375rem);
@@ -133,6 +133,27 @@ html.lenis body {
 @utility pattern-rede {
   background-image: radial-gradient(circle at 1px 1px, currentColor 1.2px, transparent 1.6px);
   background-size: 28px 28px;
+}
+
+/* Ondas do símbolo emitidas continuamente (hero) */
+@keyframes wave-emit {
+  0% {
+    transform: scale(0.35);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+.wave-emit {
+  transform-origin: 0% 50%;
+  animation: wave-emit 4.2s cubic-bezier(0.2, 0.6, 0.35, 1) infinite;
+  will-change: transform, opacity;
 }
 
 @media (prefers-reduced-motion: reduce) {
