@@ -16,6 +16,7 @@ import {
   SlidersHorizontal,
 } from "lucide-react";
 import { WavesGlyph } from "@/components/brand/Waves";
+import { PaymentCard } from "./PaymentCard";
 import { formatBRL } from "@/lib/format";
 import { cn } from "@/lib/cn";
 import type { SolutionId } from "@/content/copy";
@@ -295,20 +296,6 @@ function PixMock() {
           {received ? <StatusPill status="Recebido" /> : <StatusPill status="Pendente" />}
         </div>
       </div>
-    </div>
-  );
-}
-
-function PaymentCard({ label }: { label: string }) {
-  return (
-    <div className="relative h-[170px] w-[270px] overflow-hidden rounded-[1.25rem] bg-gradient-to-br from-ciano-500 to-[#0384b3] p-5 text-white shadow-[0_30px_60px_-24px_rgba(2,120,170,.7)]">
-      <WavesGlyph className="absolute -right-4 -top-6 h-48 w-32 text-white/15" strokeWidth={4} />
-      <div className="h-7 w-10 rounded-md bg-white/35" />
-      <p className="mt-8 font-semibold tracking-[0.18em] text-[0.9375rem]">•••• •••• •••• 4821</p>
-      <p className="mt-2 flex justify-between text-[0.6875rem] text-white/80">
-        <span>CLIENTE EXEMPLO</span>
-        <span>{label}</span>
-      </p>
     </div>
   );
 }
