@@ -25,7 +25,7 @@ export function About() {
           </div>
 
           {/* Mobile: cartões para deslizar */}
-          <SwipeDeck label="Sobre a GIMO Pay" className="lg:hidden" itemClassName="flex">
+          <SwipeDeck label="Sobre a GIMO Pay" className="min-w-0 lg:hidden" itemClassName="flex">
             {about.paragraphs.map((p, i) => {
               const Icon = icons[i];
               return (

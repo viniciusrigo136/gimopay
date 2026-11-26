@@ -61,6 +61,8 @@
   }
 
   body {
+    /* Proteção: nada pode alargar a página no mobile (sem quebrar position: sticky). */
+    overflow-x: clip;
     background: #fff;
     color: var(--color-ardosia-700);
     font-family: var(--font-sans);

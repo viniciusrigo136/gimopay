@@ -41,8 +41,9 @@ export function SwipeDeck({
         aria-roledescription="carrossel"
         aria-label={label}
         className="-mx-5 flex snap-x snap-mandatory scroll-px-5 gap-3 overflow-x-auto px-5 pb-3 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        initial={{ opacity: 0, x: 60 }}
-        whileInView={{ opacity: 1, x: 0 }}
+        // Revelação por recorte (não desloca a caixa, então não alarga a página no mobile).
+        initial={{ opacity: 0, clipPath: "inset(0 0 0 35%)" }}
+        whileInView={{ opacity: 1, clipPath: "inset(0 0 0 0%)" }}
         viewport={{ once: true, amount: 0.3 }}
         transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
       >
