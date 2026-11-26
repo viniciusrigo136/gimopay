@@ -1,26 +1,29 @@
 import "server-only";
 import type { Lead } from "./validation";
 
+export type DeliveryResult = "delivered" | "not_configured" | "failed";
+
 /**
  * Adaptador de entrega de leads comerciais.
  *
  * TODO (integração): definir o destino oficial — CRM, e-mail transacional
  * ou webhook — e implementar aqui. Variáveis sugeridas:
- *   LEADS_WEBHOOK_URL  — endpoint que recebe o JSON do lead
+ *   LEADS_WEBHOOK_URL   — endpoint que recebe o JSON do lead
  *   LEADS_WEBHOOK_TOKEN — token de autenticação, se houver
  *
- * Enquanto não houver destino configurado, o lead é apenas registrado no
- * log do servidor (sem persistência).
+ * Sem destino configurado, o lead NÃO é armazenado e o formulário informa
+ * ao visitante que o envio ainda não está disponível.
  */
-export async function deliverLead(lead: Lead): Promise<{ ok: boolean }> {
+export async function deliverLead(lead: Lead): Promise<DeliveryResult> {
   const url = process.env.LEADS_WEBHOOK_URL;
 
   if (!url) {
-    console.info("[leads] destino não configurado; lead recebido:", {
-      ...lead,
-      document: "***",
+    // Sem dados pessoais no log: só o necessário para diagnóstico.
+    console.warn("[leads] LEADS_WEBHOOK_URL não configurada; lead não entregue.", {
+      segment: lead.segment,
+      solution: lead.solution,
     });
-    return { ok: true };
+    return "not_configured";
   }
 
   const res = await fetch(url, {
@@ -33,5 +36,5 @@ export async function deliverLead(lead: Lead): Promise<{ ok: boolean }> {
     },
     body: JSON.stringify({ ...lead, source: "site", createdAt: new Date().toISOString() }),
   });
-  return { ok: res.ok };
+  return res.ok ? "delivered" : "failed";
 }

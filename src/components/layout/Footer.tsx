@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Logo } from "@/components/brand/Logo";
 import { copy } from "@/content/copy";
-import { site, isPlaceholderHref } from "@/config/site";
+import { site, hasLink } from "@/config/site";
 
 const linkCls = "text-[0.9375rem] text-ardosia-300 transition-colors hover:text-white";
 
@@ -61,20 +61,20 @@ export function Footer() {
                     {footer.support.contact}
                   </Link>
                 </li>
-                <li>
-                  <a href={site.links.helpCenter} className={linkCls}>
-                    {footer.support.helpCenter}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href={site.links.account}
-                    className={linkCls}
-                    {...(isPlaceholderHref(site.links.account) ? {} : { target: "_blank", rel: "noopener noreferrer" })}
-                  >
-                    {footer.support.account}
-                  </a>
-                </li>
+                {hasLink(site.links.helpCenter) && (
+                  <li>
+                    <a href={site.links.helpCenter} className={linkCls}>
+                      {footer.support.helpCenter}
+                    </a>
+                  </li>
+                )}
+                {hasLink(site.links.account) && (
+                  <li>
+                    <a href={site.links.account} className={linkCls} target="_blank" rel="noopener noreferrer">
+                      {footer.support.account}
+                    </a>
+                  </li>
+                )}
                 {contacts.map((c) => (
                   <li key={c.href}>
                     <a href={c.href} className={linkCls}>

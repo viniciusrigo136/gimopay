@@ -6,8 +6,11 @@
  * quando os dados forem enviados, sem tocar nos componentes.
  */
 
+import { copy } from "@/content/copy";
+
 type SiteConfig = {
   name: string;
+  title: string;
   url: string;
   description: string;
   links: { account: string; helpCenter: string; gimoCharge: string };
@@ -17,17 +20,19 @@ type SiteConfig = {
 
 export const site: SiteConfig = {
   name: "GIMO Pay",
+  /** Título padrão das páginas: marca + rótulo do banner principal da copy. */
+  title: `GIMO Pay | ${copy.hero.label}`,
   /** TODO: domínio oficial (ex.: "https://..."). Usado em metadados e Open Graph. */
   url: "",
-  description:
-    "Soluções de pagamento que conectam empresas, pessoas e oportunidades. Gateway, link de pagamento, Pix, cartões, antecipação de recebíveis e gestão de transações.",
+  /** Descrição para buscadores e redes: texto do banner principal da copy oficial. */
+  description: copy.hero.lead,
 
   links: {
-    /** TODO: URL do painel do cliente ("Acessar minha conta"). */
-    account: "#",
-    /** TODO: URL da central de atendimento. Enquanto vazio, aponta para o formulário. */
-    helpCenter: "/#contato",
-    /** TODO: site oficial da GIMO Charge. Enquanto vazio, o nome aparece sem link. */
+    /** TODO: URL do painel do cliente ("Acessar minha conta"). Vazio = link oculto. */
+    account: "",
+    /** TODO: URL da central de atendimento. Vazio = link oculto. */
+    helpCenter: "",
+    /** TODO: site oficial da GIMO Charge. Vazio = o nome aparece sem link. */
     gimoCharge: "",
   },
 
@@ -49,4 +54,5 @@ export const site: SiteConfig = {
   ],
 };
 
-export const isPlaceholderHref = (href: string) => href === "" || href === "#";
+/** Um link só é exibido quando há URL de verdade configurada. */
+export const hasLink = (href: string) => href !== "" && href !== "#";

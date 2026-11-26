@@ -5,6 +5,7 @@ import { Expand, Headset, Layers, MousePointerClick, Plug, ScanEye, type LucideI
 import { RevealText } from "@/components/ui/RevealText";
 import { SwipeDeck } from "@/components/motion/SwipeDeck";
 import { copy } from "@/content/copy";
+import { EASE_OUT } from "@/lib/motion";
 
 const icons: LucideIcon[] = [MousePointerClick, Layers, ScanEye, Plug, Expand, Headset];
 
@@ -27,7 +28,7 @@ export function Differentials() {
                 key={d.title}
                 variants={{
                   hidden: { opacity: 0, y: 24 },
-                  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
+                  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: EASE_OUT } },
                 }}
                 whileHover="hover"
                 className="group border-t border-ardosia-200 pt-7"

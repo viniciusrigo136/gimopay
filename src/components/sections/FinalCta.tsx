@@ -5,6 +5,7 @@ import { useRef } from "react";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { RevealText } from "@/components/ui/RevealText";
 import { WavesGlyph } from "@/components/brand/Waves";
+import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
 import { copy } from "@/content/copy";
 
 export function FinalCta() {
@@ -12,6 +13,7 @@ export function FinalCta() {
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const x = useTransform(scrollYProgress, [0, 1], ["-12%", "10%"]);
   const scale = useTransform(scrollYProgress, [0, 1], [0.9, 1.12]);
+  const reduce = usePrefersReducedMotion();
 
   return (
     <section
@@ -21,11 +23,11 @@ export function FinalCta() {
       <div className="container-page">
         <div
           ref={ref}
-          className="relative isolate overflow-hidden rounded-[var(--radius-tile)] bg-gradient-to-br from-[#18bce6] via-ciano-500 to-[#0597c8] px-6 py-16 sm:px-12 sm:py-20 lg:px-16 lg:py-24"
+          className="relative isolate overflow-hidden rounded-[var(--radius-tile)] bg-gradient-to-br from-ciano-400 via-ciano-500 to-ciano-600 px-6 py-16 sm:px-12 sm:py-20 lg:px-16 lg:py-24"
         >
           <m.div
             aria-hidden
-            style={{ x, scale }}
+            style={reduce ? { x: 0, scale: 1 } : { x, scale }}
             className="pointer-events-none absolute -right-[8%] top-1/2 -z-10 -translate-y-1/2 text-white/25"
           >
             <WavesGlyph className="h-[34rem] w-[22rem] sm:h-[44rem] sm:w-[29rem]" strokeWidth={4.2} />

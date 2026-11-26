@@ -1,6 +1,7 @@
 "use client";
 
 import { m } from "motion/react";
+import { EASE_OUT } from "@/lib/motion";
 
 type Props = {
   children: React.ReactNode;
@@ -22,7 +23,7 @@ export function FadeIn({ children, className, delay = 0, y = 18, onMount, as = "
       {...(onMount
         ? { animate: target }
         : { whileInView: target, viewport: { once: true, amount: 0.4 } })}
-      transition={{ duration: 0.9, delay, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.9, delay, ease: EASE_OUT }}
     >
       {children}
     </Comp>

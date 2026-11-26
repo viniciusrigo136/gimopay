@@ -9,7 +9,8 @@ import {
   useTransform,
 } from "motion/react";
 import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useMediaQuery } from "@/lib/useMediaQuery";
 import {
   ArrowDownToLine,
   BarChart3,
@@ -24,9 +25,10 @@ import { ButtonLink } from "@/components/ui/ButtonLink";
 import { RevealText } from "@/components/ui/RevealText";
 import { IllustrativeBadge } from "@/components/ui/IllustrativeBadge";
 import { ScaleToFit } from "@/components/motion/ScaleToFit";
-import { solutionMockups } from "@/components/mockups/SolutionMockups";
+import { solutionMockups } from "@/components/mockups/solutions";
 import { copy, solutions, type SolutionId } from "@/content/copy";
 import { cn } from "@/lib/cn";
+import { EASE_OUT } from "@/lib/motion";
 
 const icons: Record<SolutionId, LucideIcon> = {
   gateway: Workflow,
@@ -44,15 +46,7 @@ export function Solutions() {
   const [index, setIndex] = useState(0);
   const [autoplay, setAutoplay] = useState(true);
   const reduce = usePrefersReducedMotion();
-  const isDesktop = useSyncExternalStore(
-    (cb) => {
-      const mq = window.matchMedia("(min-width: 1024px)");
-      mq.addEventListener("change", cb);
-      return () => mq.removeEventListener("change", cb);
-    },
-    () => window.matchMedia("(min-width: 1024px)").matches,
-    () => false,
-  );
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
   const sectionRef = useRef<HTMLElement>(null);
   const inView = useInView(sectionRef, { amount: 0.35 });
   const progress = useMotionValue(0);
@@ -178,7 +172,7 @@ export function Solutions() {
                           initial={{ height: 0, opacity: 0 }}
                           animate={{ height: "auto", opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                          transition={{ duration: 0.45, ease: EASE_OUT }}
                         >
                           <span className="block max-w-[26rem] pl-[3.75rem] pt-2 text-body font-normal text-ardosia-700">
                             {s.description}
@@ -231,7 +225,7 @@ export function Solutions() {
                     initial={{ opacity: 0, y: 24, scale: 0.98, filter: "blur(6px)" }}
                     animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
                     exit={{ opacity: 0, y: -16, scale: 0.98, filter: "blur(6px)" }}
-                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    transition={{ duration: 0.5, ease: EASE_OUT }}
                   >
                     <Mock />
                   </m.div>

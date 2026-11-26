@@ -3,6 +3,7 @@
 import { m, useMotionValueEvent, useScroll, useTransform, type MotionValue } from "motion/react";
 import { Children, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
+import { EASE_OUT } from "@/lib/motion";
 
 /**
  * Carrossel de deslizar (mobile): rolagem nativa com snap, o cartão em foco
@@ -45,7 +46,7 @@ export function SwipeDeck({
         initial={{ opacity: 0, clipPath: "inset(0 0 0 35%)" }}
         whileInView={{ opacity: 1, clipPath: "inset(0 0 0 0%)" }}
         viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.9, ease: EASE_OUT }}
       >
         {items.map((child, i) => (
           <DeckItem key={i} index={i} count={n} progress={scrollXProgress} className={itemClassName}>

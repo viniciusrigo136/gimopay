@@ -1,6 +1,6 @@
 "use client";
 
-import { m, useMotionValue, useSpring, } from "motion/react";
+import { m, useMotionValue, useSpring } from "motion/react";
 import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
 import { useRef } from "react";
 import { cn } from "@/lib/cn";
@@ -11,7 +11,7 @@ type Size = "md" | "lg";
 
 const variants: Record<Variant, string> = {
   primary:
-    "bg-ciano-500 text-marinho-950 shadow-[0_1px_0_rgba(255,255,255,.35)_inset,0_10px_24px_-12px_rgba(2,170,215,.9)] hover:bg-[#13b6e2]",
+    "bg-ciano-500 text-marinho-950 shadow-cta hover:bg-ciano-400",
   secondary:
     "bg-white text-marinho-800 ring-1 ring-inset ring-ardosia-200 hover:ring-marinho-800/40",
   ghost: "text-marinho-800 hover:bg-marinho-800/5",

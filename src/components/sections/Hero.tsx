@@ -2,9 +2,9 @@ import { ButtonLink } from "@/components/ui/ButtonLink";
 import { RevealText } from "@/components/ui/RevealText";
 import { FadeIn } from "@/components/motion/FadeIn";
 import { WavesGlyph } from "@/components/brand/Waves";
-import { HeroScene } from "./HeroScene";
-import { HeroStream } from "./HeroStream";
-import { HeroWaves } from "./HeroWaves";
+import { HeroScene } from "@/components/mockups/HeroScene";
+import { HeroStream } from "@/components/mockups/HeroStream";
+import { HeroWaves } from "@/components/brand/HeroWaves";
 import { copy } from "@/content/copy";
 
 export function Hero() {

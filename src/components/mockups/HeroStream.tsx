@@ -2,10 +2,8 @@
 
 import {
   AnimatePresence,
-  animate,
   m,
   useInView,
-  useMotionValue,
   useScroll,
   useTransform,
 } from "motion/react";
@@ -15,20 +13,20 @@ import { WavesGlyph } from "@/components/brand/Waves";
 import { IllustrativeBadge } from "@/components/ui/IllustrativeBadge";
 import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
 import { formatBRL } from "@/lib/format";
+import { demoSales, useSalesTotal, type DemoMethod } from "./demoSales";
 
-/* Notificações 100% fictícias, apenas demonstrativas. */
-type Sale = { icon: LucideIcon; title: string; detail: string; amount: number };
-const sales: Sale[] = [
-  { icon: QrCode, title: "Pix recebido", detail: "Pedido 1042", amount: 248.9 },
-  { icon: CreditCard, title: "Crédito aprovado", detail: "3x no cartão", amount: 1290 },
-  { icon: Link2, title: "Link de pagamento pago", detail: "Pedido 0482", amount: 180 },
-  { icon: CreditCard, title: "Débito aprovado", detail: "À vista", amount: 86.5 },
-  { icon: ShoppingBag, title: "Venda na loja virtual", detail: "Gateway de pagamento", amount: 349.9 },
-];
+/** Ícone de cada meio de pagamento nas notificações. */
+const methodIcon: Record<DemoMethod, LucideIcon> = {
+  Pix: QrCode,
+  Crédito: CreditCard,
+  Débito: CreditCard,
+  "Link de pagamento": Link2,
+  "Loja virtual": ShoppingBag,
+};
+const sales = demoSales;
 
 const INTERVAL = 2600;
 const VISIBLE = 3;
-const BASE_TOTAL = 2840;
 const spring = { type: "spring", stiffness: 380, damping: 30, mass: 0.9 } as const;
 
 type Item = { id: number; sale: number };
@@ -42,8 +40,7 @@ export function HeroStream() {
     { id: 0, sale: 0 },
   ]);
   const nextId = useRef(2);
-  const total = useMotionValue(BASE_TOTAL);
-  const totalText = useTransform(total, (v) => formatBRL(v));
+  const { text: totalText, add: addToTotal } = useSalesTotal();
   const [pulse, setPulse] = useState(0);
 
   // Parallax: o bloco sobe e suaviza enquanto o usuário rola.
@@ -56,8 +53,8 @@ export function HeroStream() {
     const sale = id % sales.length;
     setItems((list) => [{ id, sale }, ...list].slice(0, VISIBLE + 1));
     setPulse((p) => p + 1);
-    animate(total, total.get() + sales[sale].amount, { duration: 0.9, ease: [0.16, 1, 0.3, 1] });
-  }, [total]);
+    addToTotal(sales[sale].amount);
+  }, [addToTotal]);
 
   useEffect(() => {
     if (reduce || !inView) return;
@@ -75,7 +72,7 @@ export function HeroStream() {
     <m.div ref={ref} style={reduce ? undefined : { y, opacity }} className="relative">
       <div className="mb-3 flex items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
-          <span className="relative grid size-9 place-items-center rounded-[0.75rem] bg-ciano-500 text-white shadow-[0_8px_18px_-8px_rgba(2,170,215,.9)]">
+          <span className="relative grid size-9 place-items-center rounded-[0.75rem] bg-ciano-500 text-white shadow-cta">
             <WavesGlyph className="h-4 w-3" strokeWidth={6} />
             <AnimatePresence>
               {!reduce && (
@@ -110,7 +107,7 @@ export function HeroStream() {
         <AnimatePresence initial={false}>
           {visible.map((item, pos) => {
             const sale = sales[item.sale];
-            const Icon = sale.icon;
+            const Icon = methodIcon[sale.method];
             return (
               <m.div
                 key={item.id}
@@ -121,7 +118,7 @@ export function HeroStream() {
                 exit={{ y: VISIBLE * 17 + 8, scale: 0.8, opacity: 0, transition: { duration: 0.35 } }}
                 transition={spring}
               >
-                <div className="flex items-center gap-3 rounded-[1.125rem] bg-white/95 p-3 pr-3.5 shadow-[0_18px_40px_-18px_rgba(13,24,42,.35),0_0_0_1px_var(--color-ardosia-200)] backdrop-blur">
+                <div className="flex items-center gap-3 rounded-[1.125rem] bg-white/95 p-3 pr-3.5 shadow-flutuante backdrop-blur">
                   <span className="grid size-11 shrink-0 place-items-center rounded-[0.875rem] bg-ciano-50 text-ciano-700">
                     <Icon className="size-5" strokeWidth={1.8} />
                   </span>

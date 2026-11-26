@@ -14,7 +14,7 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   ...(site.url ? { metadataBase: new URL(site.url) } : {}),
   title: {
-    default: "GIMO Pay | Soluções inteligentes de pagamento",
+    default: site.title,
     template: "%s | GIMO Pay",
   },
   description: site.description,
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "pt_BR",
     siteName: site.name,
-    title: "GIMO Pay | Soluções inteligentes de pagamento",
+    title: site.title,
     description: site.description,
   },
 };

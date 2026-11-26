@@ -7,8 +7,9 @@ import { CircleUserRound, Menu, X } from "lucide-react";
 import { Logo } from "@/components/brand/Logo";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { copy } from "@/content/copy";
-import { site } from "@/config/site";
+import { site, hasLink } from "@/config/site";
 import { cn } from "@/lib/cn";
+import { EASE_OUT } from "@/lib/motion";
 
 const sectionIds = copy.nav.items.map((i) => i.href.slice(1));
 
@@ -79,7 +80,7 @@ export function Header({ onHome = true }: { onHome?: boolean }) {
         className={cn(
           "fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow,backdrop-filter] duration-300",
           scrolled || open
-            ? "bg-white/85 shadow-[0_1px_0_var(--color-ardosia-200)] backdrop-blur-xl"
+            ? "bg-white/85 shadow-borda backdrop-blur-xl"
             : "bg-transparent",
         )}
       >
@@ -124,13 +125,15 @@ export function Header({ onHome = true }: { onHome?: boolean }) {
           </nav>
 
           <div className="flex items-center gap-2">
-            <a
-              href={site.links.account}
-              className="hidden items-center gap-2 rounded-full px-3 py-2 text-[0.875rem] font-medium text-marinho-800 transition-colors hover:bg-marinho-800/5 md:inline-flex"
-            >
-              <CircleUserRound className="size-[18px]" strokeWidth={1.8} aria-hidden />
-              {copy.nav.account}
-            </a>
+            {hasLink(site.links.account) && (
+              <a
+                href={site.links.account}
+                className="hidden items-center gap-2 rounded-full px-3 py-2 text-[0.875rem] font-medium text-marinho-800 transition-colors hover:bg-marinho-800/5 md:inline-flex"
+              >
+                <CircleUserRound className="size-[18px]" strokeWidth={1.8} aria-hidden />
+                {copy.nav.account}
+              </a>
+            )}
             <ButtonLink href={hrefFor("#contato")} className="hidden sm:inline-flex" magnetic>
               {copy.nav.cta}
             </ButtonLink>
@@ -169,7 +172,7 @@ export function Header({ onHome = true }: { onHome?: boolean }) {
             initial={{ clipPath: "inset(0 0 100% 0)" }}
             animate={{ clipPath: "inset(0 0 0% 0)" }}
             exit={{ clipPath: "inset(0 0 100% 0)" }}
-            transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.55, ease: EASE_OUT }}
             data-lenis-prevent
           >
             <nav aria-label="Principal" className="container-page flex-1 overflow-y-auto pt-6">
@@ -184,7 +187,7 @@ export function Header({ onHome = true }: { onHome?: boolean }) {
                     key={item.href}
                     variants={{
                       hidden: { opacity: 0, y: 24 },
-                      show: { opacity: 1, y: 0, transition: { ease: [0.16, 1, 0.3, 1], duration: 0.6 } },
+                      show: { opacity: 1, y: 0, transition: { ease: EASE_OUT, duration: 0.6 } },
                     }}
                     className="border-b border-ardosia-200"
                   >
@@ -212,15 +215,17 @@ export function Header({ onHome = true }: { onHome?: boolean }) {
               >
                 {copy.nav.cta}
               </ButtonLink>
-              <ButtonLink
-                href={site.links.account}
-                variant="secondary"
-                size="lg"
-                className="w-full"
-                icon={<CircleUserRound className="size-5" strokeWidth={1.8} aria-hidden />}
-              >
-                {copy.nav.account}
-              </ButtonLink>
+              {hasLink(site.links.account) && (
+                <ButtonLink
+                  href={site.links.account}
+                  variant="secondary"
+                  size="lg"
+                  className="w-full"
+                  icon={<CircleUserRound className="size-5" strokeWidth={1.8} aria-hidden />}
+                >
+                  {copy.nav.account}
+                </ButtonLink>
+              )}
             </m.div>
           </m.div>
         )}

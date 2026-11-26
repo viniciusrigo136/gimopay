@@ -1,17 +1,16 @@
 "use client";
 
-import { m, useInView, } from "motion/react";
+import { m, useInView } from "motion/react";
 import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
 import { useRef } from "react";
 import { Car, PlugZap, Zap } from "lucide-react";
 import Image from "next/image";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { RevealText } from "@/components/ui/RevealText";
-import { copy } from "@/content/copy";
+import { copy, ui } from "@/content/copy";
 import { site } from "@/config/site";
 import icon from "../../../public/brand/gimopay-icon.png";
-
-const ease = [0.16, 1, 0.3, 1] as const;
+import { EASE_OUT as ease } from "@/lib/motion";
 
 /** Linha de conexão com pulsos de luz percorrendo o trajeto. */
 function Connector({ vertical, delay = 0, active }: { vertical?: boolean; delay?: number; active: boolean }) {
@@ -87,7 +86,7 @@ export function Mobility() {
         {/* Fluxo: motorista → GIMO Charge + GIMO Pay → operador */}
         <div ref={ref} className="mt-16 lg:mt-24">
           <div className="flex flex-col items-stretch lg:flex-row lg:items-center lg:gap-6">
-            <Endpoint icon={Car} label="Motoristas" />
+            <Endpoint icon={Car} label={ui.mobility.drivers} />
             <Connector active={inView} />
             <Connector vertical active={inView} />
 
@@ -103,7 +102,7 @@ export function Mobility() {
                   <Zap className="size-6" strokeWidth={1.7} aria-hidden />
                 </span>
                 <p className="mt-5 text-h3 font-semibold text-white">{chargeName}</p>
-                <p className="mt-1 text-[0.9375rem]">Tecnologia de gestão das recargas</p>
+                <p className="mt-1 text-[0.9375rem]">{ui.mobility.chargeRole}</p>
               </m.div>
               <m.div
                 className="relative rounded-[var(--radius-panel)] bg-ciano-500 p-6 text-marinho-950"
@@ -113,14 +112,14 @@ export function Mobility() {
                 transition={{ duration: 0.8, ease, delay: 0.12 }}
               >
                 <Image src={icon} alt="" className="size-12 rounded-[0.875rem] ring-2 ring-white/50" sizes="48px" />
-                <p className="mt-5 text-h3 font-semibold">GIMO Pay</p>
-                <p className="mt-1 text-[0.9375rem]">Processamento dos pagamentos</p>
+                <p className="mt-5 text-h3 font-semibold">{site.name}</p>
+                <p className="mt-1 text-[0.9375rem]">{ui.mobility.payRole}</p>
               </m.div>
             </div>
 
             <Connector active={inView} delay={0.8} />
             <Connector vertical active={inView} delay={0.8} />
-            <Endpoint icon={PlugZap} label="Operadores de estações de recarga" />
+            <Endpoint icon={PlugZap} label={ui.mobility.operators} />
           </div>
         </div>
 
@@ -130,7 +129,7 @@ export function Mobility() {
             <p className="max-w-[38rem] font-medium text-white">{mobility.closing}</p>
           </div>
           <div className="lg:col-span-5 lg:flex lg:items-start lg:justify-end">
-            <ButtonLink href="#contato" variant="onDark" size="lg" magnetic prefill={{ segment: "Mobilidade elétrica" }}>
+            <ButtonLink href="#contato" variant="onDark" size="lg" magnetic prefill={{ segment: "mobilidade" }}>
               {mobility.cta}
             </ButtonLink>
           </div>

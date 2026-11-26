@@ -4,24 +4,25 @@ import { AnimatePresence, m } from "motion/react";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { Check, ChevronDown, LoaderCircle } from "lucide-react";
 import { submitLead, type LeadState } from "@/app/actions";
-import { copy, segments, solutions } from "@/content/copy";
+import { copy, ui } from "@/content/copy";
 import { onPrefill } from "@/lib/prefill";
 import {
   maskCurrency,
   maskDocument,
   maskPhone,
+  segmentOptions,
+  solutionOptions,
   validateLead,
   type Lead,
   type LeadErrors,
   type LeadField,
 } from "@/lib/validation";
 import { cn } from "@/lib/cn";
+import { EASE_OUT } from "@/lib/motion";
 
-const f = copy.contact.fields;
-const segmentOptions = [...segments.map((s) => s.replace(/\.$/, "")), "Outro"];
-const solutionOptions = [...solutions.map((s) => s.name), "Ainda não sei"];
+const fieldLabels = copy.contact.fields;
 
-const empty: Lead = {
+const emptyLead: Lead = {
   name: "",
   company: "",
   document: "",
@@ -38,9 +39,23 @@ const masks: Partial<Record<LeadField, (v: string) => string>> = {
   revenue: maskCurrency,
 };
 
+/** Aviso oficial de privacidade, com o trecho "Política de Privacidade" virando link. */
+function PrivacyNotice() {
+  const [before, after] = copy.contact.privacy.split(ui.form.privacyLinkText);
+  return (
+    <p className="text-[0.8125rem] text-ardosia-500">
+      {before}
+      <a href="/privacidade" className="font-medium text-ciano-700 underline underline-offset-2">
+        {ui.form.privacyLinkText}
+      </a>
+      {after}
+    </p>
+  );
+}
+
 export function ContactForm() {
   const [state, formAction, pending] = useActionState<LeadState, FormData>(submitLead, { status: "idle" });
-  const [values, setValues] = useState<Lead>(empty);
+  const [values, setValues] = useState<Lead>(emptyLead);
   const [errors, setErrors] = useState<LeadErrors>({});
   const [touched, setTouched] = useState<Partial<Record<LeadField, boolean>>>({});
   const formRef = useRef<HTMLFormElement>(null);
@@ -58,8 +73,8 @@ export function ContactForm() {
       onPrefill(({ segment, solution }) =>
         setValues((v) => ({
           ...v,
-          ...(segment && segmentOptions.includes(segment) ? { segment } : {}),
-          ...(solution && solutionOptions.includes(solution) ? { solution } : {}),
+          ...(segment ? { segment } : {}),
+          ...(solution ? { solution } : {}),
         })),
       ),
     [],
@@ -90,7 +105,7 @@ export function ContactForm() {
     }
   };
 
-  const field = (name: LeadField) => ({
+  const fieldProps = (name: LeadField) => ({
     id: `lead-${name}`,
     name,
     value: values[name],
@@ -105,7 +120,7 @@ export function ContactForm() {
         className="flex min-h-[28rem] flex-col items-center justify-center text-center"
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.6, ease: EASE_OUT }}
         role="status"
       >
         <span className="relative grid size-20 place-items-center">
@@ -127,11 +142,14 @@ export function ContactForm() {
             <Check className="size-9" strokeWidth={2.6} aria-hidden />
           </m.span>
         </span>
-        <p className="mt-8 text-h3 font-semibold text-marinho-800">Dados enviados</p>
-        <p className="mt-2 max-w-[22rem] text-ardosia-700">Nossa equipe comercial vai entrar em contato pelos dados informados.</p>
+        <p className="mt-8 text-h3 font-semibold text-marinho-800">{ui.form.success.title}</p>
+        <p className="mt-2 max-w-[22rem] text-ardosia-700">{ui.form.success.text}</p>
       </m.div>
     );
   }
+
+  const notice =
+    state.status === "unavailable" ? ui.form.unavailable : state.status === "error" ? ui.form.error : null;
 
   return (
     <form ref={formRef} action={formAction} onSubmit={onSubmit} noValidate className="grid gap-x-4 gap-y-5 sm:grid-cols-2">
@@ -143,29 +161,37 @@ export function ContactForm() {
         </label>
       </div>
 
-      <Field label={f.name} error={errors.name} name="name" className="sm:col-span-2">
-        <input {...field("name")} type="text" autoComplete="name" onChange={(e) => set("name", e.target.value)} className={inputCls(errors.name)} />
+      <Field label={fieldLabels.name} error={errors.name} name="name" className="sm:col-span-2">
+        <input {...fieldProps("name")} type="text" autoComplete="name" onChange={(e) => set("name", e.target.value)} className={inputCls(errors.name)} />
       </Field>
-      <Field label={f.company} error={errors.company} name="company">
-        <input {...field("company")} type="text" autoComplete="organization" onChange={(e) => set("company", e.target.value)} className={inputCls(errors.company)} />
+      <Field label={fieldLabels.company} error={errors.company} name="company">
+        <input {...fieldProps("company")} type="text" autoComplete="organization" onChange={(e) => set("company", e.target.value)} className={inputCls(errors.company)} />
       </Field>
-      <Field label={f.document} error={errors.document} name="document">
-        <input {...field("document")} type="text" inputMode="numeric" autoComplete="off" placeholder="Somente números" onChange={(e) => set("document", e.target.value)} className={inputCls(errors.document)} />
+      <Field label={fieldLabels.document} error={errors.document} name="document">
+        <input
+          {...fieldProps("document")}
+          type="text"
+          autoComplete="off"
+          autoCapitalize="characters"
+          placeholder={ui.form.documentPlaceholder}
+          onChange={(e) => set("document", e.target.value)}
+          className={inputCls(errors.document)}
+        />
       </Field>
-      <Field label={f.email} error={errors.email} name="email">
-        <input {...field("email")} type="email" autoComplete="email" onChange={(e) => set("email", e.target.value)} className={inputCls(errors.email)} />
+      <Field label={fieldLabels.email} error={errors.email} name="email">
+        <input {...fieldProps("email")} type="email" autoComplete="email" onChange={(e) => set("email", e.target.value)} className={inputCls(errors.email)} />
       </Field>
-      <Field label={f.whatsapp} error={errors.whatsapp} name="whatsapp">
-        <input {...field("whatsapp")} type="tel" inputMode="tel" autoComplete="tel-national" placeholder="(00) 00000-0000" onChange={(e) => set("whatsapp", e.target.value)} className={inputCls(errors.whatsapp)} />
+      <Field label={fieldLabels.whatsapp} error={errors.whatsapp} name="whatsapp">
+        <input {...fieldProps("whatsapp")} type="tel" inputMode="tel" autoComplete="tel-national" placeholder={ui.form.phonePlaceholder} onChange={(e) => set("whatsapp", e.target.value)} className={inputCls(errors.whatsapp)} />
       </Field>
-      <Field label={f.segment} error={errors.segment} name="segment">
-        <Select {...field("segment")} onChange={(e) => set("segment", e.target.value)} options={segmentOptions} invalid={!!errors.segment} />
+      <Field label={fieldLabels.segment} error={errors.segment} name="segment">
+        <Select {...fieldProps("segment")} onChange={(e) => set("segment", e.target.value)} options={segmentOptions} invalid={!!errors.segment} />
       </Field>
-      <Field label={f.revenue} error={errors.revenue} name="revenue">
-        <input {...field("revenue")} type="text" inputMode="numeric" placeholder="R$ 0,00" onChange={(e) => set("revenue", e.target.value)} className={inputCls(errors.revenue)} />
+      <Field label={fieldLabels.revenue} error={errors.revenue} name="revenue">
+        <input {...fieldProps("revenue")} type="text" inputMode="numeric" placeholder={ui.form.revenuePlaceholder} onChange={(e) => set("revenue", e.target.value)} className={inputCls(errors.revenue)} />
       </Field>
-      <Field label={f.solution} error={errors.solution} name="solution" className="sm:col-span-2">
-        <Select {...field("solution")} onChange={(e) => set("solution", e.target.value)} options={solutionOptions} invalid={!!errors.solution} />
+      <Field label={fieldLabels.solution} error={errors.solution} name="solution" className="sm:col-span-2">
+        <Select {...fieldProps("solution")} onChange={(e) => set("solution", e.target.value)} options={solutionOptions} invalid={!!errors.solution} />
       </Field>
 
       <div className="mt-2 flex flex-col gap-4 sm:col-span-2">
@@ -173,30 +199,25 @@ export function ContactForm() {
           type="submit"
           disabled={pending}
           whileTap={{ scale: 0.98 }}
-          className="relative inline-flex min-h-14 items-center justify-center gap-2.5 rounded-[var(--radius-control)] bg-ciano-500 px-7 text-base font-semibold text-marinho-950 shadow-[0_10px_24px_-12px_rgba(2,170,215,.9)] transition-colors hover:bg-[#13b6e2] disabled:cursor-progress disabled:opacity-80"
+          className="relative inline-flex min-h-14 items-center justify-center gap-2.5 rounded-[var(--radius-control)] bg-ciano-500 px-7 text-base font-semibold text-marinho-950 shadow-cta transition-colors hover:bg-ciano-400 disabled:cursor-progress disabled:opacity-80"
         >
           {pending && <LoaderCircle className="size-5 animate-spin" aria-hidden />}
-          {pending ? "Enviando" : copy.contact.submit}
+          {pending ? ui.form.sending : copy.contact.submit}
         </m.button>
         <AnimatePresence>
-          {state.status === "error" && (
+          {notice && (
             <m.p
+              key={state.status}
               role="alert"
               initial={{ opacity: 0, y: -6 }}
               animate={{ opacity: 1, y: 0 }}
               className="rounded-xl bg-red-50 px-4 py-3 text-[0.875rem] text-erro"
             >
-              Não foi possível enviar agora. Tente novamente em alguns instantes.
+              {notice}
             </m.p>
           )}
         </AnimatePresence>
-        <p className="text-[0.8125rem] text-ardosia-500">
-          Ao enviar este formulário, você declara estar ciente da nossa{" "}
-          <a href="/privacidade" className="font-medium text-ciano-700 underline underline-offset-2">
-            Política de Privacidade
-          </a>
-          .
-        </p>
+        <PrivacyNotice />
       </div>
     </form>
   );
@@ -249,16 +270,19 @@ function Select({
   options,
   invalid,
   ...props
-}: React.SelectHTMLAttributes<HTMLSelectElement> & { options: string[]; invalid: boolean }) {
+}: React.SelectHTMLAttributes<HTMLSelectElement> & {
+  options: Array<{ value: string; label: string }>;
+  invalid: boolean;
+}) {
   return (
     <div className="relative">
-      <select {...props} className={cn(inputCls(invalid ? "x" : undefined), "appearance-none pr-10", !props.value && "text-ardosia-500")}>
+      <select {...props} className={cn(inputCls(invalid ? "invalid" : undefined), "appearance-none pr-10", !props.value && "text-ardosia-500")}>
         <option value="" disabled>
-          Selecione
+          {ui.form.select}
         </option>
         {options.map((o) => (
-          <option key={o} value={o}>
-            {o}
+          <option key={o.value} value={o.value}>
+            {o.label}
           </option>
         ))}
       </select>

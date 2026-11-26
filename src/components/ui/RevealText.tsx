@@ -3,6 +3,7 @@
 import { m, type Variants } from "motion/react";
 import { createElement } from "react";
 import { cn } from "@/lib/cn";
+import { EASE_OUT } from "@/lib/motion";
 
 const container: Variants = {
   hidden: {},
@@ -13,7 +14,7 @@ const container: Variants = {
 
 const word: Variants = {
   hidden: { y: "110%" },
-  show: { y: "0%", transition: { duration: 0.85, ease: [0.16, 1, 0.3, 1] } },
+  show: { y: "0%", transition: { duration: 0.85, ease: EASE_OUT } },
 };
 
 type Props = {

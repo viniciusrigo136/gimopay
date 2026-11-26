@@ -1,8 +1,10 @@
+import type { SegmentId, SolutionId } from "@/content/copy";
+
 /**
  * Pré-preenchimento do formulário comercial a partir de CTAs da página.
- * Um CTA dispara o evento; o formulário escuta e aplica os valores.
+ * Usa ids tipados: se a copy mudar, o TypeScript acusa os CTAs afetados.
  */
-export type PrefillPayload = { segment?: string; solution?: string };
+export type PrefillPayload = { segment?: SegmentId; solution?: SolutionId };
 
 const EVENT = "gimopay:prefill";
 

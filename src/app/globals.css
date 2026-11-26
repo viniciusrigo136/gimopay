@@ -11,22 +11,42 @@
   --color-ciano-50: #eaf8fd;
   --color-ciano-100: #cdeff9;
   --color-ciano-200: #9fe0f2;
+  --color-ciano-300: #3fd2f5; /* brilhos sobre fundo escuro */
+  --color-ciano-400: #13b6e2; /* hover do CTA, início de degradês */
   --color-ciano-500: #02aad7; /* marca: superfícies, CTAs, estados */
   --color-ciano-600: #0091bd; /* texto grande sobre branco (3.6:1) */
   --color-ciano-700: #00799c; /* texto e links sobre branco (5:1) */
 
   /* Marinho */
+  --color-marinho-700: #0b3a73; /* degradê do cartão */
   --color-marinho-800: #00316d; /* logo: títulos */
   --color-marinho-900: #0a2147;
   --color-marinho-950: #0d182a; /* manual Gimo: seções escuras */
 
   /* Ardósia — manual Gimo */
+  --color-ardosia-100: #eef3f7;
   --color-ardosia-200: #dde3ea;
   --color-ardosia-300: #b8c3d4;
   --color-ardosia-500: #667280;
   --color-ardosia-700: #334155;
 
   --color-nevoa: #f5f7fa;
+
+  /* Chip do cartão demonstrativo */
+  --color-chip-claro: #f3dcae;
+  --color-chip: #c9a46a;
+  --color-chip-medio: #e8cf9c;
+  --color-chip-borda: #a8844e;
+  --color-chip-linha: #8a6a3a;
+
+  /* Sombras */
+  --shadow-painel: 0 30px 70px -30px rgb(13 24 42 / 0.4), 0 0 0 1px var(--color-ardosia-200);
+  --shadow-flutuante: 0 24px 50px -24px rgb(13 24 42 / 0.35), 0 0 0 1px var(--color-ardosia-200);
+  --shadow-escuro: 0 30px 60px -24px rgb(13 24 42 / 0.6);
+  --shadow-cta: 0 1px 0 rgb(255 255 255 / 0.35) inset, 0 10px 24px -12px rgb(2 170 215 / 0.9);
+  --shadow-borda: 0 1px 0 var(--color-ardosia-200);
+  --shadow-aparelho: 0 40px 80px -30px rgb(13 24 42 / 0.55), 0 0 0 1px rgb(255 255 255 / 0.06) inset;
+  --shadow-cartao: 0 40px 70px -28px rgb(3 60 120 / 0.75), 0 0 0 1px rgb(255 255 255 / 0.08) inset;
   --color-sucesso: #0f9d6b;
   --color-erro: #c2333a;
 

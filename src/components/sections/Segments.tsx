@@ -13,12 +13,14 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { RevealText } from "@/components/ui/RevealText";
-import { SegmentMarquee } from "./SegmentMarquee";
-import { copy, segments } from "@/content/copy";
+import { SegmentMarquee } from "@/components/motion/SegmentMarquee";
+import { copy, segments, type SegmentId } from "@/content/copy";
 import { cn } from "@/lib/cn";
+import { EASE_OUT } from "@/lib/motion";
 
 const icons: LucideIcon[] = [Store, Briefcase, Truck, MonitorSmartphone, Cpu, Car, PlugZap, Handshake];
-const mobilityIdx = new Set([5, 6]);
+/** Segmentos ligados à seção de mobilidade elétrica: recebem destaque. */
+const mobilitySegments = new Set<SegmentId>(["mobilidade", "eletropostos"]);
 
 export function Segments() {
   return (
@@ -36,9 +38,9 @@ export function Segments() {
           <div className="mb-10 md:hidden">
             <SegmentMarquee
               items={segments.map((s, i) => ({
-                label: s.replace(/\.$/, ""),
+                label: s.label.replace(/\.$/, ""),
                 icon: icons[i],
-                highlight: mobilityIdx.has(i),
+                highlight: mobilitySegments.has(s.id),
               }))}
             />
           </div>
@@ -51,13 +53,13 @@ export function Segments() {
           >
             {segments.map((s, i) => {
               const Icon = icons[i];
-              const mobility = mobilityIdx.has(i);
+              const mobility = mobilitySegments.has(s.id);
               return (
                 <m.li
-                  key={s}
+                  key={s.id}
                   variants={{
                     hidden: { opacity: 0, y: 20 },
-                    show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
+                    show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE_OUT } },
                   }}
                   className="group relative flex items-center gap-4 border-t border-ardosia-200 py-5"
                 >
@@ -74,7 +76,7 @@ export function Segments() {
                     <Icon className="size-[22px]" strokeWidth={1.7} aria-hidden />
                   </span>
                   <span className="text-[1.0625rem] font-semibold leading-snug tracking-[-0.01em] text-marinho-800">
-                    {s}
+                    {s.label}
                   </span>
                 </m.li>
               );

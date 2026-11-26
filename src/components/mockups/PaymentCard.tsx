@@ -13,13 +13,13 @@ function Chip() {
     <svg viewBox="0 0 48 38" className="h-[30px] w-[38px]" aria-hidden>
       <defs>
         <linearGradient id="chip-gold" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#f3dcae" />
-          <stop offset="0.5" stopColor="#c9a46a" />
-          <stop offset="1" stopColor="#e8cf9c" />
+          <stop offset="0" stopColor="var(--color-chip-claro)" />
+          <stop offset="0.5" stopColor="var(--color-chip)" />
+          <stop offset="1" stopColor="var(--color-chip-medio)" />
         </linearGradient>
       </defs>
-      <rect x="0.5" y="0.5" width="47" height="37" rx="7" fill="url(#chip-gold)" stroke="#a8844e" strokeOpacity=".5" />
-      <g fill="none" stroke="#8a6a3a" strokeOpacity=".55" strokeWidth="1.1">
+      <rect x="0.5" y="0.5" width="47" height="37" rx="7" fill="url(#chip-gold)" stroke="var(--color-chip-borda)" strokeOpacity=".5" />
+      <g fill="none" stroke="var(--color-chip-linha)" strokeOpacity=".55" strokeWidth="1.1">
         <path d="M0.5 13h14M0.5 25h14M33.5 13h14M33.5 25h14" />
         <path d="M14.5 0.5v12.5c0 3 2 4 4 4h11c2 0 4-1 4-4V0.5M14.5 37.5V25c0-3 2-4 4-4h11c2 0 4 1 4 4v12.5" />
       </g>
@@ -80,24 +80,24 @@ export function PaymentCard({ label, className }: { label: "Crédito" | "Débito
           onPointerMove={onMove}
           onPointerLeave={onLeave}
           style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-          className="relative aspect-[1.586] w-[336px] overflow-hidden rounded-[18px] bg-[linear-gradient(135deg,#0b3a73_0%,#0a2147_45%,#0d182a_100%)] shadow-[0_40px_70px_-28px_rgba(3,60,120,.75),0_0_0_1px_rgba(255,255,255,.08)_inset]"
+          className="relative aspect-[1.586] w-[336px] overflow-hidden rounded-[18px] bg-[linear-gradient(135deg,var(--color-marinho-700)_0%,var(--color-marinho-900)_45%,var(--color-marinho-950)_100%)] shadow-cartao"
         >
           {/* Curvas de luz em ciano */}
           <svg viewBox="0 0 300 189" className="absolute inset-0 size-full" aria-hidden>
             <defs>
               <linearGradient id="pc-top" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stopColor="#13c3ee" stopOpacity=".95" />
-                <stop offset="1" stopColor="#02aad7" stopOpacity="0" />
+                <stop offset="0" stopColor="var(--color-ciano-400)" stopOpacity=".95" />
+                <stop offset="1" stopColor="var(--color-ciano-500)" stopOpacity="0" />
               </linearGradient>
               <linearGradient id="pc-bottom" x1="1" y1="1" x2="0" y2="0">
-                <stop offset="0" stopColor="#18c9f2" stopOpacity=".9" />
-                <stop offset="1" stopColor="#02aad7" stopOpacity="0" />
+                <stop offset="0" stopColor="var(--color-ciano-400)" stopOpacity=".9" />
+                <stop offset="1" stopColor="var(--color-ciano-500)" stopOpacity="0" />
               </linearGradient>
             </defs>
             <path d="M0 0h150C110 20 60 40 0 78Z" fill="url(#pc-top)" opacity=".75" />
             <path d="M300 189H170c50-12 95-44 130-92Z" fill="url(#pc-bottom)" opacity=".7" />
-            <path d="M-10 150C70 110 150 40 190 -10" stroke="#3fd2f5" strokeOpacity=".35" strokeWidth="1" fill="none" />
-            <path d="M200 200C240 160 280 110 310 70" stroke="#3fd2f5" strokeOpacity=".35" strokeWidth="1" fill="none" />
+            <path d="M-10 150C70 110 150 40 190 -10" stroke="var(--color-ciano-300)" strokeOpacity=".35" strokeWidth="1" fill="none" />
+            <path d="M200 200C240 160 280 110 310 70" stroke="var(--color-ciano-300)" strokeOpacity=".35" strokeWidth="1" fill="none" />
           </svg>
 
           {/* Reflexo que acompanha o ponteiro */}

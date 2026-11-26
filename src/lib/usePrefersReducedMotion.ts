@@ -1,21 +1,8 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useMediaQuery } from "./useMediaQuery";
 
-const query = "(prefers-reduced-motion: reduce)";
-
-/**
- * Preferência de movimento reduzido, segura para hidratação:
- * no servidor (e na hidratação) assume `false`, depois sincroniza.
- */
+/** Preferência do sistema por menos movimento (segura para hidratação). */
 export function usePrefersReducedMotion() {
-  return useSyncExternalStore(
-    (cb) => {
-      const mq = window.matchMedia(query);
-      mq.addEventListener("change", cb);
-      return () => mq.removeEventListener("change", cb);
-    },
-    () => window.matchMedia(query).matches,
-    () => false,
-  );
+  return useMediaQuery("(prefers-reduced-motion: reduce)");
 }

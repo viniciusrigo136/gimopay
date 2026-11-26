@@ -2,11 +2,8 @@
 
 import {
   AnimatePresence,
-  animate,
   m,
   useInView,
-  useMotionValue,
-  useTransform,
 } from "motion/react";
 import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
 import { useEffect, useRef, useState } from "react";
@@ -17,18 +14,14 @@ import { IllustrativeBadge } from "@/components/ui/IllustrativeBadge";
 import { WavesGlyph } from "@/components/brand/Waves";
 import { formatBRL } from "@/lib/format";
 import { cn } from "@/lib/cn";
+import { EASE_OUT } from "@/lib/motion";
+import { checkoutSales, DEMO_DAY_START, useSalesTotal } from "./demoSales";
 
-/* Dados 100% fictícios, apenas para demonstração. */
-const transactions = [
-  { order: "Pedido 1042", method: "Pix", detail: "Pagamento instantâneo", amount: 248.9 },
-  { order: "Pedido 1043", method: "Crédito", detail: "3x no cartão", amount: 1290 },
-  { order: "Pedido 1044", method: "Débito", detail: "À vista no cartão", amount: 86.5 },
-] as const;
+const transactions = checkoutSales;
 
 const methods = ["Pix", "Crédito", "Débito"] as const;
 const methodIcon = { Pix: QrCode, Crédito: CreditCard, Débito: CreditCard } as const;
 
-const BASE_TOTAL = 3120;
 const baseBars = [34, 52, 41, 66, 48, 72];
 
 type Phase = "checkout" | "select" | "paying" | "approved";
@@ -49,12 +42,11 @@ export function HeroScene() {
   const [cycle, setCycle] = useState(0);
   const [settled, setSettled] = useState<Array<{ idx: number; id: number }>>([]);
 
-  const total = useMotionValue(BASE_TOTAL);
-  const totalText = useTransform(total, (v) => formatBRL(v));
+  const { total, text: totalText, add: addToTotal } = useSalesTotal();
 
   // Estado final estático para quem prefere menos movimento.
   useEffect(() => {
-    if (reduce) total.set(BASE_TOTAL + transactions[0].amount);
+    if (reduce) total.set(DEMO_DAY_START + transactions[0].amount);
   }, [reduce, total]);
 
   useEffect(() => {
@@ -64,7 +56,7 @@ export function HeroScene() {
     timers.push(
       window.setTimeout(() => {
         setSettled((s) => [...s, { idx: txIndex, id: cycle }].slice(-3));
-        animate(total, total.get() + tx.amount, { duration: 1.1, ease: [0.16, 1, 0.3, 1] });
+        addToTotal(tx.amount);
       }, 3500),
       window.setTimeout(() => {
         setTxIndex((i) => (i + 1) % transactions.length);
@@ -72,7 +64,7 @@ export function HeroScene() {
       }, CYCLE),
     );
     return () => timers.forEach(clearTimeout);
-  }, [txIndex, cycle, inView, reduce, total]);
+  }, [txIndex, cycle, inView, reduce, addToTotal]);
 
   const tx = transactions[txIndex];
   const phaseView: Phase = reduce ? "approved" : phase;
@@ -89,7 +81,7 @@ export function HeroScene() {
         className="absolute right-[2%] top-[4%] h-[78%] w-[80%] rounded-[22%] bg-gradient-to-br from-ciano-100 to-ciano-50"
         initial={{ scale: 0.86, opacity: 0, rotate: -4 }}
         animate={{ scale: 1, opacity: 1, rotate: 0 }}
-        transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+        transition={{ duration: 1.2, ease: EASE_OUT, delay: 0.2 }}
       />
 
       {/* Ondas que pulsam na aprovação */}
@@ -114,7 +106,7 @@ export function HeroScene() {
         className="absolute right-[7%] top-0 w-[285px]"
         initial={{ y: 60, opacity: 0, rotate: 3 }}
         animate={{ y: 0, opacity: 1, rotate: 0 }}
-        transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.35 }}
+        transition={{ duration: 1.1, ease: EASE_OUT, delay: 0.35 }}
       >
         <PhoneFrame>
           <StatusBar />
@@ -140,7 +132,7 @@ export function HeroScene() {
                   initial={{ y: 18, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: -18, opacity: 0 }}
-                  transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{ duration: 0.45, ease: EASE_OUT }}
                 >
                   {formatBRL(tx.amount)}
                 </m.p>
@@ -248,10 +240,10 @@ export function HeroScene() {
 
       {/* Painel: vendas do dia */}
       <m.div
-        className="absolute left-0 top-[33%] w-[236px] rounded-[var(--radius-panel)] bg-white p-5 shadow-[0_30px_60px_-24px_rgba(13,24,42,.35),0_0_0_1px_var(--color-ardosia-200)]"
+        className="absolute left-0 top-[33%] w-[236px] rounded-[var(--radius-panel)] bg-white p-5 shadow-flutuante"
         initial={{ x: -40, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
-        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.75 }}
+        transition={{ duration: 1, ease: EASE_OUT, delay: 0.75 }}
       >
         <p className="text-[0.6875rem] font-medium text-ardosia-500">Vendas de hoje</p>
         <m.p className="mt-0.5 text-[1.5rem] font-bold tracking-[-0.03em] text-marinho-950 tabular-nums">

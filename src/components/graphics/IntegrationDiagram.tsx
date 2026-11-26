@@ -1,8 +1,10 @@
 "use client";
 
-import { m, useInView, } from "motion/react";
+import { m, useInView } from "motion/react";
+import { ui } from "@/content/copy";
 import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
 import { useRef } from "react";
+import { EASE_OUT } from "@/lib/motion";
 
 type Node = { label: string; x: number; y: number };
 type Layout = {
@@ -16,8 +18,8 @@ type Layout = {
   outPath: (n: Node, i: number) => string;
 };
 
-const sourcesLabels = ["Plataformas digitais", "Sistemas de gestão", "Modelos de negócio"];
-const methodsLabels = ["Pix", "Cartão de crédito", "Cartão de débito"];
+const sourcesLabels = ui.integrations.sources;
+const methodsLabels = ui.integrations.methods;
 
 const horizontal: Layout = {
   w: 720,
@@ -74,7 +76,7 @@ function Diagram({ layout, className }: { layout: Layout; className?: string }) 
       key={`${side}-${n.label}`}
       initial={{ opacity: 0, x: side === "src" ? -14 : 14 }}
       animate={inView ? { opacity: 1, x: 0 } : {}}
-      transition={{ duration: 0.7, delay: (side === "src" ? 0 : 1.1) + i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.7, delay: (side === "src" ? 0 : 1.1) + i * 0.1, ease: EASE_OUT }}
     >
       <rect
         x={n.x}
@@ -111,7 +113,7 @@ function Diagram({ layout, className }: { layout: Layout; className?: string }) 
       viewBox={`0 0 ${layout.w} ${layout.h}`}
       className={className}
       role="img"
-      aria-label="Diagrama ilustrativo: plataformas digitais, sistemas de gestão e modelos de negócio conectados à GIMO Pay, que conecta Pix, cartão de crédito e cartão de débito."
+      aria-label={ui.integrations.diagramLabel}
       style={{ fontFamily: "var(--font-sans)" }}
     >
       {paths.map((p) => (

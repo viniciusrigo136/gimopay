@@ -2,7 +2,7 @@ import { HeartHandshake, Sparkles, Workflow } from "lucide-react";
 import { RevealText } from "@/components/ui/RevealText";
 import { FadeIn } from "@/components/motion/FadeIn";
 import { SwipeDeck } from "@/components/motion/SwipeDeck";
-import { ScrubText } from "./ScrubText";
+import { ScrubText } from "@/components/motion/ScrubText";
 import { copy } from "@/content/copy";
 
 const icons = [Sparkles, Workflow, HeartHandshake];

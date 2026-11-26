@@ -51,15 +51,17 @@ export const solutions = [
 export type SolutionId = (typeof solutions)[number]["id"];
 
 export const segments = [
-  "Comércio e varejo.",
-  "Prestadores de serviços.",
-  "Distribuidores e revendedores.",
-  "Plataformas digitais.",
-  "Empresas de tecnologia.",
-  "Mobilidade elétrica.",
-  "Eletropostos e redes de recarga.",
-  "Vendas B2B.",
+  { id: "varejo", label: "Comércio e varejo." },
+  { id: "servicos", label: "Prestadores de serviços." },
+  { id: "distribuidores", label: "Distribuidores e revendedores." },
+  { id: "plataformas", label: "Plataformas digitais." },
+  { id: "tecnologia", label: "Empresas de tecnologia." },
+  { id: "mobilidade", label: "Mobilidade elétrica." },
+  { id: "eletropostos", label: "Eletropostos e redes de recarga." },
+  { id: "b2b", label: "Vendas B2B." },
 ] as const;
+
+export type SegmentId = (typeof segments)[number]["id"];
 
 export const copy = {
   nav: {
@@ -275,5 +277,58 @@ export const copy = {
       ],
     },
     copyright: "© 2026 GIMO Pay. Todos os direitos reservados.",
+  },
+} as const;
+
+/**
+ * Microcopy de interface criada nesta etapa (NÃO faz parte da copy oficial).
+ * Textos funcionais, de rótulo ou derivados literalmente da copy oficial.
+ * Validar com o cliente na etapa 2.
+ */
+export const ui = {
+  form: {
+    select: "Selecione",
+    otherSegment: "Outro",
+    undecidedSolution: "Ainda não sei",
+    documentPlaceholder: "CPF ou CNPJ",
+    phonePlaceholder: "(00) 00000-0000",
+    revenuePlaceholder: "R$ 0,00",
+    sending: "Enviando",
+    success: {
+      title: "Dados enviados",
+      text: "Suas informações foram enviadas para a equipe comercial da GIMO Pay.",
+    },
+    unavailable: "O envio do formulário ainda não está disponível. Tente novamente mais tarde.",
+    error: "Não foi possível enviar agora. Tente novamente em alguns instantes.",
+    privacyLinkText: "Política de Privacidade",
+    errors: {
+      name: "Informe nome e sobrenome.",
+      company: "Informe o nome da empresa.",
+      document: "Informe um CPF ou CNPJ válido.",
+      email: "Informe um e-mail válido, como nome@empresa.com.br.",
+      whatsapp: "Informe o WhatsApp com DDD.",
+      segment: "Selecione o segmento de atuação.",
+      revenue: "Informe o faturamento mensal estimado.",
+      solution: "Selecione a solução de interesse.",
+    },
+  },
+  legal: {
+    back: "Voltar para o início",
+    pendingTitle: "Conteúdo em definição",
+    pendingText: "O texto oficial deste documento está sendo preparado e será publicado nesta página.",
+  },
+  /** Rótulos do fluxo de mobilidade, retirados literalmente da seção 08 da copy. */
+  mobility: {
+    drivers: "Motoristas",
+    operators: "Operadores de estações de recarga",
+    chargeRole: "Tecnologia de gestão das recargas",
+    payRole: "Processamento dos pagamentos",
+  },
+  /** Rótulos do diagrama de integrações, retirados da seção 06 e das soluções da copy. */
+  integrations: {
+    sources: ["Plataformas digitais", "Sistemas de gestão", "Modelos de negócio"],
+    methods: ["Pix", "Cartão de crédito", "Cartão de débito"],
+    diagramLabel:
+      "Diagrama ilustrativo: plataformas digitais, sistemas de gestão e modelos de negócio conectados à GIMO Pay, que conecta Pix, cartão de crédito e cartão de débito.",
   },
 } as const;

@@ -1,7 +1,7 @@
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { RevealText } from "@/components/ui/RevealText";
 import { FadeIn } from "@/components/motion/FadeIn";
-import { IntegrationDiagram } from "./IntegrationDiagram";
+import { IntegrationDiagram } from "@/components/graphics/IntegrationDiagram";
 import { copy } from "@/content/copy";
 
 export function Integrations() {
@@ -26,7 +26,7 @@ export function Integrations() {
             ))}
           </div>
           <div className="mt-9">
-            <ButtonLink href="#contato" size="lg" magnetic prefill={{ solution: "Gateway de pagamento" }}>
+            <ButtonLink href="#contato" size="lg" magnetic>
               {integrations.cta}
             </ButtonLink>
           </div>

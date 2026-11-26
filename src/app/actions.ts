@@ -1,11 +1,20 @@
 "use server";
 
 import { deliverLead } from "@/lib/leads";
-import { leadFields, validateLead, type Lead, type LeadErrors } from "@/lib/validation";
+import {
+  leadFields,
+  optionLabel,
+  segmentOptions,
+  solutionOptions,
+  validateLead,
+  type Lead,
+  type LeadErrors,
+} from "@/lib/validation";
 
 export type LeadState =
   | { status: "idle" }
   | { status: "invalid"; errors: LeadErrors }
+  | { status: "unavailable" }
   | { status: "error" }
   | { status: "success" };
 
@@ -21,8 +30,15 @@ export async function submitLead(_prev: LeadState, formData: FormData): Promise<
   if (Object.keys(errors).length) return { status: "invalid", errors };
 
   try {
-    const { ok } = await deliverLead(lead);
-    return ok ? { status: "success" } : { status: "error" };
+    // A equipe recebe os rótulos legíveis, não os ids internos.
+    const result = await deliverLead({
+      ...lead,
+      segment: optionLabel(segmentOptions, lead.segment),
+      solution: optionLabel(solutionOptions, lead.solution),
+    });
+    if (result === "delivered") return { status: "success" };
+    if (result === "not_configured") return { status: "unavailable" };
+    return { status: "error" };
   } catch {
     return { status: "error" };
   }

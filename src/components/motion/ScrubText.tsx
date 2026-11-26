@@ -2,12 +2,23 @@
 
 import { m, useScroll, useTransform, type MotionValue } from "motion/react";
 import { useRef } from "react";
+import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
 
 /** Frase que "acende" palavra por palavra conforme a rolagem. */
 export function ScrubText({ text, className }: { text: string; className?: string }) {
   const ref = useRef<HTMLParagraphElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 85%", "end 45%"] });
   const words = text.split(" ");
+  const reduce = usePrefersReducedMotion();
+
+  // Sem animação ligada à rolagem para quem prefere menos movimento.
+  if (reduce) {
+    return (
+      <p ref={ref} className={className}>
+        {text}
+      </p>
+    );
+  }
 
   return (
     <p ref={ref} className={className} aria-label={text}>
