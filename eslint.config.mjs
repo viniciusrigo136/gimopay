@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Projeto Tassionero: app independente com lint próprio.
+    "tassionero/**",
   ]),
 ]);
 
